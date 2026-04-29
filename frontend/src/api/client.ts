@@ -13,7 +13,13 @@ import type {
   SiteResponse,
 } from "../data/types";
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? "http://localhost:8000/api/v1";
+const isLocalHost =
+  window.location.hostname === "localhost" ||
+  window.location.hostname === "127.0.0.1" ||
+  window.location.hostname === "::1";
+const API_BASE_URL = isLocalHost
+  ? import.meta.env.VITE_API_BASE_URL ?? "http://localhost:8000/api/v1"
+  : "/api/v1";
 const MAX_IMAGE_DIMENSION = 1600;
 const TARGET_IMAGE_BYTES = 900 * 1024;
 type UploadProgressCallback = (percent: number) => void;
