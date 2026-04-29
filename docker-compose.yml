@@ -1,0 +1,50 @@
+version: "3.9"
+
+services:
+  postgres:
+    image: postgres:16
+    container_name: scifi-postgres
+    environment:
+      POSTGRES_DB: scifi
+      POSTGRES_USER: scifi
+      POSTGRES_PASSWORD: scifi
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7
+    container_name: scifi-redis
+    ports:
+      - "6379:6379"
+
+  backend:
+    build:
+      context: ./backend
+    container_name: scifi-backend
+    environment:
+      SCIFI_APP_NAME: Sci-Fi Novel Introduction
+      SCIFI_ENVIRONMENT: docker
+      SCIFI_DATABASE_URL: postgresql+asyncpg://scifi:scifi@postgres:5432/scifi
+      SCIFI_ALLOWED_ORIGINS: http://localhost:5173,http://frontend:5173
+      SCIFI_COOKIE_SECURE: "false"
+    ports:
+      - "8000:8000"
+    depends_on:
+      - postgres
+      - redis
+
+  frontend:
+    build:
+      context: ./frontend
+    container_name: scifi-frontend
+    environment:
+      VITE_API_BASE_URL: http://localhost:8000/api/v1
+    ports:
+      - "5173:5173"
+    depends_on:
+      - backend
+
+volumes:
+  postgres_data:

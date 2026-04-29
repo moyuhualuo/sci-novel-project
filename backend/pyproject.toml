@@ -1,0 +1,38 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "scifi-novel-backend"
+version = "1.0.0"
+description = "Sci-fi novel introduction backend built on FastAPI and ASGI"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+  "aiosqlite>=0.20.0",
+  "asyncpg>=0.30.0",
+  "email-validator>=2.2.0",
+  "fastapi>=0.115.0",
+  "greenlet>=3.1.1",
+  "httpx>=0.28.1",
+  "itsdangerous>=2.2.0",
+  "pydantic-settings>=2.6.1",
+  "sqlalchemy>=2.0.36",
+  "uvicorn[standard]>=0.32.1",
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=8.3.3",
+  "pytest-asyncio>=0.24.0",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-p no:cacheprovider"
+
+[tool.uv]
+package = true
+
+[tool.hatch.build.targets.wheel]
+packages = ["app"]

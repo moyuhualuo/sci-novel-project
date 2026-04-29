@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" fill="none">
+  <defs>
+    <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0%" stop-color="#0d1520"/>
+      <stop offset="55%" stop-color="#213b59"/>
+      <stop offset="100%" stop-color="#7d8fa8"/>
+    </linearGradient>
+    <radialGradient id="halo" cx="0" cy="0" r="1" gradientTransform="translate(890 140) rotate(135) scale(390 280)">
+      <stop offset="0%" stop-color="#f3c46a" stop-opacity=".9"/>
+      <stop offset="100%" stop-color="#f3c46a" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1200" height="630" rx="36" fill="url(#bg)"/>
+  <rect x="50" y="50" width="1100" height="530" rx="28" fill="rgba(255,255,255,.06)" stroke="rgba(255,255,255,.16)"/>
+  <ellipse cx="890" cy="140" rx="390" ry="280" fill="url(#halo)"/>
+  <g opacity=".72" stroke="#dfe8f2" stroke-width="4">
+    <path d="M160 315c58-138 362-138 420 0-58 138-362 138-420 0Z"/>
+    <path d="M370 105c138 58 138 362 0 420-138-58-138-362 0-420Z"/>
+  </g>
+  <circle cx="370" cy="315" r="42" fill="#f3c46a"/>
+  <text x="620" y="260" fill="#f3f7fb" font-family="'Noto Serif SC','Source Han Serif SC',serif" font-size="56" font-weight="700">
+    Sci-Fi Novel Introduction
+  </text>
+  <text x="620" y="330" fill="#d8e3ef" font-family="'Segoe UI','Microsoft YaHei',sans-serif" font-size="28">
+    Bilingual story archive, live editing, layered logs, and polished reader UX.
+  </text>
+  <text x="620" y="386" fill="#f3c46a" font-family="'Segoe UI','Microsoft YaHei',sans-serif" font-size="24">
+    Coding with Codex · Author moyu
+  </text>
+</svg>
