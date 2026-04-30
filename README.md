@@ -1,119 +1,132 @@
-# Sci-Fi Novel Introduction 1.0
+# 科幻小说介绍网站
 
-Sci-Fi Novel Introduction is a bilingual full-stack story presentation site built around `FastAPI` on `ASGI`.
-This repository delivers a v1.0 baseline with:
+这是一个基于 `FastAPI + React + PostgreSQL` 的前后端分离网站，用于展示科幻小说设定、章节内容、图片素材和更新日志。网站支持中英文切换、主题切换、登录后原位编辑，以及图片上传与操作日志记录。
 
-- `FastAPI` backend with typed APIs, cookie-based auth, audit-friendly logging, and image upload support
-- `React + TypeScript` frontend for section browsing, live editorial updates, and activity logs
-- `SQLAlchemy` data model for story sections, content blocks, users, and audit records
-- test suites, backup scripts, Docker orchestration, and architecture docs
+## 主要功能
 
-## Tech Stack
+- 中英文内容切换
+- 白天、夜间、雾蓝、护眼黄主题切换
+- 左侧章节导航与右侧子导航
+- 登录后直接在内容页编辑文字和图片
+- 图片上传与保存
+- 更新日志页面
+- 404 页面与基础异常提示
 
-### Backend
+## 技术栈
 
-- Runtime: Python 3.12
-- Web: FastAPI, Uvicorn, Starlette
-- Package manager: uv
-- ORM: SQLAlchemy 2.x async
-- Validation: Pydantic v2
-- Database: PostgreSQL in Docker, SQLite fallback for local smoke runs
-- Logging: standard logging with rotating file handler
-- Testing: pytest, httpx, pytest-asyncio
+- 后端：`FastAPI`、`SQLAlchemy`、`Pydantic`
+- 前端：`React`、`TypeScript`、`Vite`
+- 数据库：`PostgreSQL` 或本地 `SQLite`
+- 图片存储：本地目录或 `Supabase Storage`
+- 部署：`Vercel + Render + Supabase`
 
-### Frontend
-
-- Runtime: Node.js 22+
-- UI: React 18 + TypeScript + Vite
-- Styling: custom design system CSS
-- Charts and tables: Recharts + semantic HTML tables
-- Package manager: pnpm
-
-### Platform
-
-- Cache/session extension point: Redis
-- Containers: Docker Compose
-- Docs: Markdown + FastAPI OpenAPI docs
-
-## Monorepo Layout
+## 项目结构
 
 ```text
 .
 |-- backend/
 |   |-- app/
 |   |-- scripts/
-|   `-- tests/
+|   |-- tests/
+|   |-- run_local.cmd
+|   `-- test_local.cmd
 |-- docs/
 |-- frontend/
 |-- docker-compose.yml
 `-- pnpm-workspace.yaml
 ```
 
-## Quick Start
+## 本地启动
 
-### 1. Backend
+### 后端
 
-```bash
-cd backend
-python -m pip install --target .deps fastapi uvicorn[standard] sqlalchemy asyncpg aiosqlite pydantic-settings itsdangerous httpx greenlet email-validator pytest pytest-asyncio
-set PYTHONPATH=D:\codex\backend\.deps;D:\codex\backend
-python -m uvicorn app.main:app --reload
-```
-
-Windows shortcut:
+Windows：
 
 ```bat
-cd D:\codex\backend
+cd /d D:\codex\backend
 run_local.cmd
 ```
 
-Backend docs:
-
-- Swagger UI: `http://localhost:8000/docs`
-- ReDoc: `http://localhost:8000/redoc`
-
-### 2. Frontend
+如果你使用 `uv`：
 
 ```bash
-cd frontend
-npm install
-npm run dev
+cd backend
+uv sync
+uv run uvicorn app.main:app --reload
 ```
 
-### 3. Docker
+接口文档：
+
+- Swagger UI：`http://localhost:8000/docs`
+- ReDoc：`http://localhost:8000/redoc`
+
+### 前端
+
+```bat
+cd /d D:\codex\frontend
+npm.cmd install
+npm.cmd run dev
+```
+
+本地访问：
+
+- 前端：`http://localhost:5173`
+- 后端：`http://localhost:8000`
+
+## 默认管理员账号
+
+- 邮箱：`admin@scifi.local`
+- 密码：`ChangeMe123!`
+
+如果已经在线上部署，请将管理员账号、会话密钥和数据库密码改成你自己的值。
+
+## 常用命令
+
+后端测试：
+
+```bat
+cd /d D:\codex\backend
+test_local.cmd
+```
+
+前端构建：
+
+```bat
+cd /d D:\codex\frontend
+npm.cmd run build
+```
+
+Docker 启动：
 
 ```bash
 docker compose up --build
 ```
 
-## Demo Credentials
+## 环境变量
 
-- Admin email: `admin@scifi.local`
-- Admin password: `ChangeMe123!`
+示例文件：
 
-The login API writes an `HttpOnly` cookie named `scifi_session`.
+- 前端：[frontend/.env.example](D:/codex/frontend/.env.example)
+- 后端：[backend/.env.example](D:/codex/backend/.env.example)
 
-## Enterprise Features Included in v1.0
+本地开发至少需要确认：
 
-- Cookie-based session authentication
-- role-aware admin analytics endpoints
-- rotating backend log files with request IDs
-- sales KPI tables and request log inspection API
-- PostgreSQL backup script for scheduled jobs
-- sample domain model for catalog, orders, and audit logs
-- fully typed API contracts and frontend API client
-- seed data for local evaluation
+- 后端数据库地址
+- 管理员账号密码
+- 前端站点地址
 
-## Key Docs
+如果线上使用 `Supabase Storage` 或邮件验证，还需要补充对应服务的配置。
 
-- [Architecture](docs/architecture.md)
-- [Delivery Scope](docs/delivery-scope.md)
-- [UI/UX Notes](docs/ui-ux.md)
-- [中文部署文档](docs/deployment.zh-CN.md)
+## 文档
 
-## Notes
+- [项目架构](D:/codex/docs/architecture.md)
+- [功能说明](D:/codex/docs/delivery-scope.md)
+- [界面与交互说明](D:/codex/docs/ui-ux.md)
+- [部署说明（中文）](D:/codex/docs/deployment.zh-CN.md)
+- [后端使用说明](D:/codex/backend/README.md)
 
-- `uv` and `pnpm` are the recommended package managers for this stack.
-- If they are not installed on the target machine, use `pip` and `npm` as temporary fallbacks.
-- This repository also supports project-local installs in `backend/.deps` and `frontend/node_modules`.
-- Production should replace demo credentials, rotate secrets, and wire object storage, payment gateways, and CI/CD secrets management.
+## 说明
+
+- 生产环境推荐使用 `Vercel + Render + Supabase`
+- 前端线上请求默认通过 Vercel 同域 `/api` 代理到后端服务
+- 如果你只是单人使用网站，可以只保留管理员登录，不启用注册与邮件验证

@@ -1,30 +1,60 @@
-# Sci-Fi Novel Introduction UI/UX Notes
+# 界面与交互说明
 
-## Visual Direction
+## 设计目标
 
-- restrained, literary, and modern sci-fi archive aesthetic
-- ivory, charcoal, deep teal, and coral accents
-- editorial layout with dashboard-grade density
+界面以“科幻小说展示 + 在线编辑”为核心，兼顾阅读体验和管理效率。
 
-## Design Tokens
+## 主要界面
 
-- `--bg`: `#f5f1ea`
-- `--surface`: `#fffdf8`
-- `--surface-strong`: `#163638`
-- `--text`: `#1e2427`
-- `--muted`: `#6c787b`
-- `--accent`: `#eb6b56`
-- `--success`: `#1f8a5b`
+### 首页
 
-## Main Screens
+- 显示站点标题、简介和章节入口
+- 支持中英文切换
+- 支持主题切换
+- 登录后可直接编辑站点资料
 
-- Storyfront hero with world-building cues and reading focus
-- Editorial command panel with KPI cards, activity charts, and log table
-- Cookie/session status pill in the header to show authenticated state
+### 章节页
 
-## Figma Handoff Guidance
+- 左侧为主导航
+- 中间为章节内容
+- 右侧为子导航和跳转入口
+- 登录后可直接编辑文字和图片
 
-- Create a 12-column desktop grid and 4-column mobile grid.
-- Reuse the tokens above as color styles.
-- Use large editorial headings and restrained motion.
-- Keep admin information dense but still high contrast.
+### 日志页
+
+- 显示更新概览
+- 显示按操作分类的日志记录
+- 用于查看最近的新增、修改和删除情况
+
+### 登录页
+
+- 仅作为登录入口使用
+- 登录成功后返回内容页原位编辑
+
+## 交互规则
+
+- 未登录：只读浏览
+- 已登录：内容页显示编辑控件
+- 图片块可直接上传图片
+- 保存后内容立即刷新
+- 日志记录同步更新
+
+## 主题与语言
+
+### 主题
+
+- Day
+- Night
+- Mist
+- Amber
+
+### 语言
+
+- 中文
+- English
+
+## 使用建议
+
+- 阅读内容时建议使用首页和章节页
+- 编辑内容时建议登录后直接进入对应章节
+- 上传图片前建议先压缩图片尺寸，减少加载压力

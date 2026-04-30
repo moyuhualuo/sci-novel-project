@@ -1,30 +1,50 @@
-# Sci-Fi Novel Introduction 1.0 Delivery Scope
+# 功能说明
 
-## Included
+## 访客可用功能
 
-- bilingual story section APIs
-- image and text block CRUD APIs
-- admin analytics APIs with table-friendly responses
-- backend request logging and recent log browsing
-- cookie session login/logout
-- backup script for PostgreSQL and SQLite
-- React reading site and admin login/editor UI
-- pytest smoke coverage
-- Docker and environment templates
+- 浏览首页与章节内容
+- 切换中英文
+- 切换主题模式
+- 查看更新日志
+- 使用搜索栏检索章节和内容
+- 查看 404 页面与基础异常提示
 
-## Not Yet Included
+## 登录后可用功能
 
-- reader comments / discussion system
-- multi-editor review workflow
-- recommendation models
-- enterprise IAM / SSO
-- object storage abstraction
-- scheduled ETL jobs
+- 编辑站点标题、标语和简介
+- 新增、修改、删除章节
+- 新增、修改、删除内容块
+- 上传图片并插入到页面
+- 查看更新日志与最近改动
 
-## Recommended 1.1 Roadmap
+## 当前页面结构
 
-1. Add Alembic migrations and tenant-aware configuration.
-2. Integrate object storage for production-grade image hosting.
-3. Add chapter sorting, richer search, and editorial drafts.
-4. Connect metrics to Grafana and alerting.
-5. Add CI pipeline for lint, tests, and static asset publishing.
+- 首页：站点简介、章节卡片、最近更新
+- 章节页：当前章节内容与编辑区
+- 日志页：更新可视化与日志列表
+- 登录页：管理员登录入口
+
+## 已接入能力
+
+- Cookie 登录
+- 前后端分离部署
+- 图片上传
+- 日志记录
+- 双语展示
+- 多主题切换
+- 原位编辑
+
+## 可选能力
+
+以下能力需要按需配置后启用：
+
+- 注册与邮件验证
+- `Supabase Storage`
+- `Resend` 邮件发送
+
+## 当前限制
+
+- 默认更适合单管理员使用
+- 暂未提供完整多角色后台
+- 暂未提供复杂审核流
+- 暂未提供全文搜索服务

@@ -1,68 +1,96 @@
-# Sci-Fi Novel Introduction Architecture
+# 项目架构说明
 
-## Design Goals
+## 整体结构
 
-- build a production-shaped full-stack sci-fi novel introduction site on top of `ASGI`
-- keep local development simple with SQLite fallback
-- expose clean seams for image storage, search, and future content workflows
-- make observability, testing, and backup part of the first release
-
-## System Overview
+网站采用前后端分离结构：
 
 ```text
-React Reader + Editorial Console
+前端（React / Vite）
         |
         v
-FastAPI (ASGI) -> Services -> SQLAlchemy -> PostgreSQL
-        |                         |
-        |                         +-> backup script / editorial analytics
+Vercel 同域 /api 代理
         |
-        +-> rotating logs -> admin log API
-        +-> signed HttpOnly cookie sessions
+        v
+后端（FastAPI）
+        |
+        +-- PostgreSQL / SQLite
+        +-- 图片存储（本地目录或 Supabase Storage）
+        +-- 日志记录
 ```
 
-## Backend Layers
+## 前端
 
-### API Layer
+前端负责：
 
-- `app/api/routes/*.py`
-- responsible for request validation, HTTP mapping, and response schemas
+- 页面展示
+- 中英文切换
+- 主题切换
+- 登录页与内容编辑界面
+- 日志页展示
+- 调用后端接口
 
-### Service Layer
+主要目录：
 
-- `app/services/*.py`
-- business rules for authentication, story browsing, content editing, upload handling, and log parsing
+- `frontend/src/pages`：页面
+- `frontend/src/components`：公共组件
+- `frontend/src/api/client.ts`：接口请求封装
+- `frontend/src/lib/i18n.ts`：文案与语言切换
 
-### Persistence Layer
+## 后端
 
-- `app/models/*.py`
-- SQLAlchemy entities for users, story sections, content blocks, and audit records
+后端负责：
 
-### Cross-Cutting Concerns
+- 用户登录与会话校验
+- 站点内容查询
+- 章节、内容块、图片的编辑接口
+- 日志写入与读取
+- 邮件验证流程（按需启用）
 
-- `app/core/config.py` for environment settings
-- `app/middleware/request_context.py` for request IDs and cookie tracing
-- `app/core/logging.py` for rotating file logs
+主要目录：
 
-## Frontend Modules
+- `backend/app/api`：接口路由
+- `backend/app/services`：业务逻辑
+- `backend/app/models`：数据库模型
+- `backend/app/core`：配置、安全、日志
 
-- `src/components`: reusable cards, tables, and header components
-- `src/pages`: reading pages, logs page, and admin login
-- `src/api/client.ts`: typed fetch wrapper with cookie credentials
-- `src/data/mock.ts`: local fallback experience when backend is unavailable
+## 数据层
 
-## Security v1.0
+项目默认支持两种数据层：
 
-- signed `HttpOnly` session cookie
-- `sameSite=lax`
-- role check for admin routes
-- CORS allowlist
-- central security headers middleware
+- 本地开发：`SQLite`
+- 线上部署：`PostgreSQL`
 
-## Enterprise Follow-Ups
+网站内容主要包括：
 
-- OAuth2 or SSO provider integration
-- Supabase Storage or object storage integration
-- background workers for thumbnail generation and editorial reports
-- Alembic migrations and storage lifecycle backups
-- SIEM forwarding and metrics via Prometheus / OpenTelemetry
+- 站点标题、标语、简介
+- 小说章节
+- 内容块（文字 / 图片）
+- 用户信息
+- 更新日志
+
+## 登录与会话
+
+- 登录接口写入 `HttpOnly` Cookie
+- 前端通过 `/auth/me` 判断当前会话状态
+- 登录成功后回到内容页，并在原页面直接进入编辑态
+
+## 图片上传
+
+图片上传优先使用：
+
+- `Supabase Storage`
+
+如果未配置 `Supabase Storage`，则回退到：
+
+- `backend/uploads/`
+
+## 日志
+
+当前日志包括：
+
+- 内容新增
+- 内容修改
+- 内容删除
+- 最近更新展示
+
+日志既用于站点页面展示，也用于管理员追踪内容变化。
