@@ -704,6 +704,11 @@ img {
   align-items: start;
 }
 
+.story-page.reading-mode .story-main {
+  grid-template-columns: minmax(0, 980px) minmax(200px, 240px);
+  justify-content: center;
+}
+
 .story-subnav {
   position: sticky;
   top: 34px;
@@ -768,6 +773,25 @@ img {
   background:
     linear-gradient(135deg, rgba(16, 21, 29, 0.98), rgba(10, 14, 19, 0.86)),
     var(--surface);
+}
+
+.reading-content-column {
+  width: min(980px, 100%);
+  justify-self: center;
+}
+
+.reading-section-hero {
+  width: 100%;
+  padding: clamp(28px, 4vw, 44px);
+}
+
+.reading-section-hero h2 {
+  font-size: clamp(1.95rem, 3vw, 2.65rem);
+  line-height: 1.12;
+}
+
+.reading-section-hero .hero-copy {
+  max-width: 68ch;
 }
 
 .hero-panel h2 {
@@ -917,11 +941,10 @@ img {
 .reading-block-grid {
   grid-template-columns: 1fr;
   gap: 22px;
-  justify-items: center;
 }
 
 .reading-card {
-  width: min(820px, 100%);
+  width: 100%;
   padding: clamp(26px, 4vw, 42px);
   background: rgba(255, 255, 255, 0.62);
   box-shadow: none;
@@ -939,7 +962,13 @@ img {
   max-width: 940px;
 }
 
+.reading-block-grid .media-card {
+  grid-column: 1;
+}
+
 .reading-card-header {
+  width: min(68ch, 100%);
+  margin-inline: auto;
   gap: 0;
   margin-bottom: 6px;
 }
@@ -968,7 +997,7 @@ img {
 }
 
 .reading-body p + p {
-  margin-top: 0.9em;
+  margin-top: 0.58em;
 }
 
 .reading-figure {
@@ -994,6 +1023,33 @@ img {
 
 .media-card {
   grid-column: span 2;
+}
+
+.reading-subnav .subnav-panel {
+  padding: 16px;
+  border-radius: calc(var(--radius-card) + 2px);
+  background: rgba(255, 255, 255, 0.42);
+  box-shadow: none;
+}
+
+.reading-subnav .subnav-heading h3 {
+  font-size: 0.98rem;
+}
+
+.reading-subnav .subnav-label {
+  font-size: 0.72rem;
+}
+
+.reading-subnav .subnav-link {
+  border: 0;
+  padding: 8px 4px;
+  background: transparent;
+  font-size: 0.88rem;
+  line-height: 1.45;
+}
+
+:root[data-theme="night"] .reading-subnav .subnav-panel {
+  background: rgba(255, 255, 255, 0.035);
 }
 
 .editor-chip {
@@ -1861,8 +1917,10 @@ img {
 
 @media (max-width: 1280px) {
   .story-main,
+  .story-page.reading-mode .story-main,
   .story-page.sidebar-collapsed .story-main {
     grid-template-columns: 1fr;
+    justify-content: stretch;
   }
 
   .story-subnav {

@@ -79,10 +79,10 @@ function formatCount(value: number, label: string, locale: Locale): string {
   return locale === "zh" ? `${value}${label}` : `${value} ${label}`;
 }
 
-function getReadingParagraphs(value: string): string[] {
+function getReadingParagraphs(value: string, locale: Locale): string[] {
   const paragraphs = value
-    .split(/\n+/)
-    .map((paragraph) => paragraph.trim())
+    .split(/\n\s*\n+/)
+    .map((paragraph) => paragraph.replace(/\s*\n\s*/g, locale === "zh" ? "" : " ").trim())
     .filter(Boolean);
 
   return paragraphs.length ? paragraphs : [value.trim()].filter(Boolean);
@@ -776,9 +776,16 @@ export function ShopHome({
       position: nextPosition(activeSection.blocks[activeSection.blocks.length - 1]?.position),
     };
 
+    const readableBlocks = canEdit
+      ? visibleBlocks
+      : visibleBlocks.filter((block) => {
+          const blockContent = pickText(block.content, locale).trim();
+          return block.kind === "image" ? Boolean(block.image_url) : Boolean(blockContent);
+        });
+
     return (
-      <div className="story-content-column">
-        <section id="section-top" className="hero-panel section-hero-panel">
+      <div className={canEdit ? "story-content-column" : "story-content-column reading-content-column"}>
+        <section id="section-top" className={`hero-panel section-hero-panel ${canEdit ? "" : "reading-section-hero"}`}>
           <p className="eyebrow">{copy.sectionView}</p>
           {canEdit ? (
             <div className="section-editor-grid">
@@ -891,9 +898,9 @@ export function ShopHome({
             </div>
           ) : null}
 
-          {visibleBlocks.length ? (
+          {readableBlocks.length ? (
             <div className={canEdit ? "block-grid" : "block-grid reading-block-grid"}>
-              {visibleBlocks.map((block) => {
+              {readableBlocks.map((block) => {
                 const blockDraft = blockDrafts[block.id] ?? {
                   title: block.title,
                   kind: block.kind,
@@ -1033,7 +1040,7 @@ export function ShopHome({
                           )
                         ) : (
                           <div className="reading-body">
-                            {getReadingParagraphs(pickText(block.content, locale)).map((paragraph, index) => (
+                            {getReadingParagraphs(pickText(block.content, locale), locale).map((paragraph, index) => (
                               <p key={`${block.id}-paragraph-${index}`}>{paragraph}</p>
                             ))}
                           </div>
@@ -1179,7 +1186,7 @@ export function ShopHome({
 
     if (activeSection) {
       return (
-        <aside className="story-subnav">
+        <aside className={canEdit ? "story-subnav" : "story-subnav reading-subnav"}>
           <div className="subnav-panel">
             <div className="subnav-heading">
               <p className="eyebrow">{copy.subNavigation}</p>
@@ -1195,7 +1202,7 @@ export function ShopHome({
                 <button className="subnav-link" onClick={() => scrollToElement("section-blocks")}>
                   {copy.contentBlocks}
                 </button>
-                {visibleBlocks.map((block) => (
+                {(canEdit ? visibleBlocks : visibleBlocks.filter((block) => block.kind !== "image" || block.image_url)).map((block) => (
                   <button key={block.id} className="subnav-link" onClick={() => scrollToElement(`block-${block.id}`)}>
                     {pickText(block.title, locale)}
                   </button>
@@ -1291,8 +1298,16 @@ export function ShopHome({
     );
   };
 
+  const storyPageClassName = [
+    "story-page",
+    sidebarCollapsed ? "sidebar-collapsed" : "",
+    canEdit ? "" : "reading-mode",
+  ]
+    .filter(Boolean)
+    .join(" ");
+
   return (
-    <section className={sidebarCollapsed ? "story-page sidebar-collapsed" : "story-page"}>
+    <section className={storyPageClassName}>
       <Toast message={toastMessage} />
       <ConfirmDialog
         open={confirmState !== null}
