@@ -907,13 +907,22 @@ img {
   gap: 14px;
 }
 
+.reading-section-panel {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
 .reading-block-grid {
   grid-template-columns: 1fr;
   gap: 22px;
+  justify-items: center;
 }
 
 .reading-card {
-  padding: 24px 26px;
+  width: min(820px, 100%);
+  padding: clamp(26px, 4vw, 42px);
   background: rgba(255, 255, 255, 0.62);
   box-shadow: none;
 }
@@ -923,7 +932,7 @@ img {
 }
 
 .reading-text-card {
-  max-width: 860px;
+  max-width: 820px;
 }
 
 .reading-media-card {
@@ -931,23 +940,35 @@ img {
 }
 
 .reading-card-header {
-  gap: 8px;
+  gap: 0;
+  margin-bottom: 6px;
 }
 
 .reading-card-header strong {
-  font-size: 0.98rem;
-  letter-spacing: 0.01em;
+  font-family: var(--title-font);
+  font-size: clamp(1.08rem, 1.8vw, 1.32rem);
+  line-height: 1.42;
+  letter-spacing: 0;
 }
 
 .reading-body {
-  max-width: 72ch;
+  width: min(68ch, 100%);
+  margin: 0 auto;
 }
 
 .reading-body p {
   margin: 0;
-  font-size: 1rem;
-  line-height: 2;
+  font-size: clamp(1rem, 1.1vw, 1.08rem);
+  line-height: 2.18;
+  text-align: justify;
+  text-indent: 2em;
+  text-justify: inter-ideograph;
+  overflow-wrap: anywhere;
   color: color-mix(in srgb, var(--text) 88%, var(--muted) 12%);
+}
+
+.reading-body p + p {
+  margin-top: 0.9em;
 }
 
 .reading-figure {

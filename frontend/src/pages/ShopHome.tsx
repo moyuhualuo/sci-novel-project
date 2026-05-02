@@ -79,6 +79,15 @@ function formatCount(value: number, label: string, locale: Locale): string {
   return locale === "zh" ? `${value}${label}` : `${value} ${label}`;
 }
 
+function getReadingParagraphs(value: string): string[] {
+  const paragraphs = value
+    .split(/\n+/)
+    .map((paragraph) => paragraph.trim())
+    .filter(Boolean);
+
+  return paragraphs.length ? paragraphs : [value.trim()].filter(Boolean);
+}
+
 export function ShopHome({
   site,
   locale,
@@ -871,14 +880,16 @@ export function ShopHome({
           ) : null}
         </section>
 
-        <section id="section-blocks" className="panel section-block-panel">
-          <div className="panel-header">
-            <div>
-              <p className="eyebrow">{copy.contentBlocks}</p>
-              <h3>{copy.sectionCanvas}</h3>
+        <section id="section-blocks" className={`panel section-block-panel ${canEdit ? "" : "reading-section-panel"}`}>
+          {canEdit ? (
+            <div className="panel-header">
+              <div>
+                <p className="eyebrow">{copy.contentBlocks}</p>
+                <h3>{copy.sectionCanvas}</h3>
+              </div>
+              <span className="section-count-copy">{formatCount(visibleBlocks.length, copy.blockUnit, locale)}</span>
             </div>
-            <span className="section-count-copy">{formatCount(visibleBlocks.length, copy.blockUnit, locale)}</span>
-          </div>
+          ) : null}
 
           {visibleBlocks.length ? (
             <div className={canEdit ? "block-grid" : "block-grid reading-block-grid"}>
@@ -1006,7 +1017,6 @@ export function ShopHome({
                     ) : (
                       <>
                         <div className="content-card-header reading-card-header">
-                          <span>{block.kind === "image" ? copy.imageBlock : copy.textBlock}</span>
                           <strong>{pickText(block.title, locale)}</strong>
                         </div>
 
@@ -1023,7 +1033,9 @@ export function ShopHome({
                           )
                         ) : (
                           <div className="reading-body">
-                            <p>{pickText(block.content, locale)}</p>
+                            {getReadingParagraphs(pickText(block.content, locale)).map((paragraph, index) => (
+                              <p key={`${block.id}-paragraph-${index}`}>{paragraph}</p>
+                            ))}
                           </div>
                         )}
                       </>
